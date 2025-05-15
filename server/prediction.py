@@ -36,22 +36,30 @@ def train_model(data):
 
 # Make prediction with new data
 def predict(model, scaler, input_data):
-    # Map input data to the format expected by the model
-    features = np.array([
-        input_data["age"],
-        input_data["gender"],
-        input_data["chestPainType"],
-        input_data["bloodPressure"],
-        input_data["cholesterol"]
-    ]).reshape(1, -1)
+    # Extract input values
+    chest_pain_type = input_data["chestPainType"]
+    cholesterol = input_data["cholesterol"]
+    blood_pressure = input_data["bloodPressure"]
     
-    # Standardize the input
-    features_scaled = scaler.transform(features)
+    # New custom prediction logic as per requirements
+    risk_factors = 0
     
-    # Make prediction
-    prediction = model.predict(features_scaled)[0]
+    # Risk factor 1: Chest pain type is 2 or 3
+    if chest_pain_type >= 2:
+        risk_factors += 1
+        
+    # Risk factor 2: Cholesterol greater than 250
+    if cholesterol > 250:
+        risk_factors += 1
+        
+    # Risk factor 3: Blood pressure greater than 150
+    if blood_pressure > 150:
+        risk_factors += 1
     
-    return bool(prediction)
+    # If 2 or more risk factors are present, predict heart disease
+    has_heart_disease = risk_factors >= 2
+    
+    return bool(has_heart_disease)
 
 def main():
     # Parse input data from command line argument

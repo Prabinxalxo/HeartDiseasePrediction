@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: heart-disease-prediction
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
+    healthCheckPath: /
+    disk:
+      name: heart-prediction-data
+      mountPath: /data
+      sizeGB: 1
